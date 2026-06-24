@@ -1,0 +1,85 @@
+.page-header {
+  margin-bottom: 16px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0;
+  color: #2b2f38;
+}
+
+.page-subtitle {
+  color: #8a94a3;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+.add-button {
+  background-color: #5e6ce0 !important;
+  color: #fff !important;
+  margin-bottom: 20px;
+}
+
+.profiles-card {
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.profiles-table {
+  width: 100%;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.status-badge {
+  background-color: #e8f0fe;
+  color: #4f8df5;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge-empty {
+  color: #b0bac5;
+}
+
+.icon-edit {
+  color: #4f8df5;
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}
+
+::ng-deep {
+  table.profiles-table {
+    th {
+      background-color: #f4f6f9 !important;
+      font-weight: 500 !important;
+      color: #5a6675 !important;
+      padding: 8px 16px !important;
+      text-align: left !important;
+      border-bottom: 2px solid #e5e9ef !important;
+      height: 40px !important;
+    }
+
+    td {
+      padding: 4px 16px !important;
+      border-bottom: 1px solid #eef1f5 !important;
+      color: #3c4858;
+      height: 36px !important;
+    }
+  }
+
+  mat-card-content {
+    padding: 0 !important;
+  }
+}

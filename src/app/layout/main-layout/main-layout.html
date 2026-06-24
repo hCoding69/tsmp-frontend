@@ -1,0 +1,37 @@
+<mat-sidenav-container class="layout-container">
+  <mat-sidenav #sidenav mode="side" [opened]="isSidebarOpen" class="sidenav">
+    <div class="sidenav-header">
+      <h2>TSMP</h2>
+    </div>
+
+    <mat-nav-list>
+      @for (link of navLinks; track link.route) {
+        <a
+          mat-list-item
+          [routerLink]="link.route"
+          routerLinkActive="active-link"
+        >
+          <mat-icon matListItemIcon>{{ link.icon }}</mat-icon>
+          <span matListItemTitle>{{ link.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">TSMP Dashboard</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

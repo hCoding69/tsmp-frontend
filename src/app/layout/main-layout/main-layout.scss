@@ -1,0 +1,98 @@
+.layout-container {
+  height: 100vh;
+}
+
+// ─── Sidebar sombre ──────────────────────────────
+.sidenav {
+  width: 250px;
+  background-color: #1a2332;
+  color: #b0bac5;
+  border-right: none;
+  
+}
+
+mat-sidenav {
+  border-radius: 0px;
+
+}
+.mdc-list-item__primary-text {
+  color: #b0bac5;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  .logo-icon {
+    color: #4f8df5;
+  }
+
+  h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .sidenav .mat-mdc-list-item {
+  color: #b0bac5 !important;
+  margin: 4px 8px;
+
+  .mat-icon {
+    color: #8a94a3;
+    font-size: 20px;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff !important;
+  }
+}
+
+::ng-deep .active-link {
+  background-color: #4f8df5 !important;
+  color: #ffffff !important;
+
+  .mat-icon {
+    color: #ffffff !important;
+  }
+}
+
+// ─── Topbar claire ───────────────────────────────
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.toolbar-title {
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+// ─── Contenu type cards ──────────────────────────
+.content {
+  padding: 24px;
+  background-color: #f4f6f9;
+  min-height: calc(100vh - 64px);
+}
+.mat-drawer-inner-container {
+  overflow: hidden !important;
+}
+::ng-deep .mat-drawer-inner-container {
+  overflow: hidden !important;
+}

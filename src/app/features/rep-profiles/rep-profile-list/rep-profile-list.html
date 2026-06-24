@@ -1,0 +1,76 @@
+<div class="page-header">
+  <h1 class="page-title">Rep Profiles</h1>
+  <p class="page-subtitle">All representative profiles in the system.</p>
+</div>
+
+<button mat-raised-button class="add-button" routerLink="/rep-profiles/new">
+  <mat-icon>add</mat-icon>
+  Add rep profile
+</button>
+
+<mat-card class="profiles-card">
+  <mat-card-content>
+    @if (isLoading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="profiles" class="profiles-table">
+
+        <ng-container matColumnDef="agentCode">
+          <th mat-header-cell *matHeaderCellDef>Agent code</th>
+          <td mat-cell *matCellDef="let profile">{{ profile.agentCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="professionalEmail">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let profile">{{ profile.professionalEmail }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef>Phone</th>
+          <td mat-cell *matCellDef="let profile">{{ profile.phoneNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="currentStatus">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let profile">
+            @if (profile.currentStatus) {
+              <span class="status-badge">{{ profile.currentStatus.name }}</span>
+            } @else {
+              <span class="status-badge-empty">—</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="currentTitle">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let profile">
+            {{ profile.currentTitle?.name || '—' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let profile">
+            <button mat-icon-button class="icon-edit" matTooltip="Edit" [routerLink]="['/rep-profiles/edit', profile.id]">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    }
+  </mat-card-content>
+</mat-card>

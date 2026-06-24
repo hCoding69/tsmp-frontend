@@ -1,0 +1,51 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Connexion TSMP</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+          @if (loginForm.get('email')?.hasError('required')) {
+            <mat-error>L'email est requis</mat-error>
+          }
+          @if (loginForm.get('email')?.hasError('email')) {
+            <mat-error>Email invalide</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" formControlName="password" />
+          @if (loginForm.get('password')?.hasError('required')) {
+            <mat-error>Le mot de passe est requis</mat-error>
+          }
+          @if (loginForm.get('password')?.hasError('minlength')) {
+            <mat-error>8 caractères minimum</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p class="error-message">{{ errorMessage }}</p>
+        }
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          @if (isLoading) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Se connecter
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
