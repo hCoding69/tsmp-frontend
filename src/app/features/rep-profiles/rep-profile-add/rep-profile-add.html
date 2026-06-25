@@ -21,9 +21,13 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Agent code</mat-label>
-        <input matInput formControlName="agentCode" />
+<input matInput formControlName="agentCode" (blur)="checkIfAgentCodeExists(profileForm.get('agentCode')?.value, null)" />
         @if (profileForm.get('agentCode')?.hasError('required')) {
           <mat-error>Agent code is required</mat-error>
+        }
+
+        @if(profileForm.get('agentCode')?.hasError('codeTaken')) {
+          <mat-error>Agent Code is taken</mat-error>
         }
       </mat-form-field>
 

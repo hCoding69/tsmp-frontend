@@ -27,6 +27,10 @@ export const routes: Routes = [
   path: 'rep-profiles/new', 
   loadComponent: () => import('./features/rep-profiles/rep-profile-add/rep-profile-add').then(m => m.RepProfileAdd) 
 },
+{ 
+  path: 'rep-profiles/edit/:id', 
+  loadComponent: () => import('./features/rep-profiles/rep-profile-edit/rep-profile-edit').then(m => m.RepProfileEdit) 
+},
       { 
         path: 'rep-profiles', 
         loadComponent: () => import('./features/rep-profiles/rep-profile-list/rep-profile-list').then(m => m.RepProfileList) 

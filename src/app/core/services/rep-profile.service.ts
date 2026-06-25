@@ -18,9 +18,9 @@ export class RepProfileService {
         });
     }
 
-    getByUser(userId: string) {
-        return this.http.get<ApiResponse<RepProfileResponse>>(`${this.API_URL}/user/${userId}`);
-    }
+    // getByUser(userId: string) {
+    //     return this.http.get<ApiResponse<RepProfileResponse>>(`${this.API_URL}/user/${userId}`);
+    // }
 
     getByAgentCode(agentCode: string) {
         return this.http.get<ApiResponse<RepProfileResponse>>(`${this.API_URL}/agent/${agentCode}`);
@@ -33,4 +33,14 @@ export class RepProfileService {
     update(dto: RepProfileRequest, id: string) {
         return this.http.put<ApiResponse<RepProfileResponse>>(`${this.API_URL}/${id}`, dto);
     }
+
+    checkIfAgenCodeExists(agentCode: string, userId: string | null) {
+        return this.http.get<ApiResponse<Boolean>>(`${this.API_URL}/exists/agentCode/${userId}/${agentCode}`)
+    }
+
+    getByProfileId(repProfileId: string) {
+        return this.http.get<ApiResponse<RepProfileResponse>>(`${this.API_URL}/${repProfileId}`)
+    }
+
+    
 }

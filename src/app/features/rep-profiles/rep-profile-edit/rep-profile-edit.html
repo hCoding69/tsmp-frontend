@@ -1,0 +1,183 @@
+<div class="page-header">
+  <h1 class="page-title">Rep profile</h1>
+  <p class="page-subtitle">{{ profile?.agentCode }} — {{ profile?.professionalEmail }}</p>
+</div>
+
+@if (isLoading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+} @else {
+  <mat-tab-group class="profile-tabs">
+
+    <!-- ─── Onglet 1 : Informations ─────────── -->
+    <mat-tab label="Informations">
+      <div class="tab-content">
+        <mat-card class="form-card">
+          <mat-card-content>
+            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Agent code</mat-label>
+                <input matInput formControlName="agentCode" />
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Professional email</mat-label>
+                  <input matInput type="email" formControlName="professionalEmail" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone number</mat-label>
+                  <input matInput formControlName="phoneNumber" />
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="address" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Birthday</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthday" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Comment</mat-label>
+                <textarea matInput formControlName="comment" rows="3"></textarea>
+              </mat-form-field>
+
+              @if (errorMessage) {
+                <p class="error-message">{{ errorMessage }}</p>
+              }
+
+              <div class="form-actions">
+                <button mat-stroked-button type="button" routerLink="/rep-profiles">Cancel</button>
+                <button mat-raised-button class="submit-button" type="submit" [disabled]="profileForm.invalid || isSaving">
+                  @if (isSaving) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                    <ng-container><mat-icon>save</mat-icon> Save changes</ng-container>
+                  }
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- ─── Onglet 2 : Statut & Titre ────────── -->
+    <mat-tab label="Statut & Titre">
+      <div class="tab-content">
+        <div class="status-title-grid">
+
+          <mat-card class="status-card">
+            <mat-card-header>
+              <mat-card-title>Statut actuel</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="current-value">{{ profile?.currentStatus?.name || 'Aucun' }}</p>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nouveau statut</mat-label>
+                <mat-select [(ngModel)]="selectedStatusId">
+                  @for (status of statusOptions; track status.id) {
+                    <mat-option [value]="status.id">{{ status.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <button mat-raised-button class="submit-button" (click)="updateStatus()" [disabled]="isUpdatingStatus">
+                @if (isUpdatingStatus) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  Confirmer le changement
+                }
+              </button>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="status-card">
+            <mat-card-header>
+              <mat-card-title>Titre actuel</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="current-value">{{ profile?.currentTitle?.name || 'Aucun' }}</p>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nouveau titre</mat-label>
+                <mat-select [(ngModel)]="selectedTitleId">
+                  @for (title of titleOptions; track title.id) {
+                    <mat-option [value]="title.id">{{ title.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <button mat-raised-button class="submit-button" (click)="updateTitle()" [disabled]="isUpdatingTitle">
+                @if (isUpdatingTitle) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  Confirmer le changement
+                }
+              </button>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ─── Onglet 3 : Historique ───────────── -->
+    <mat-tab label="Historique">
+      <div class="tab-content">
+
+        <h3 class="history-title">Historique des statuts</h3>
+        <table mat-table [dataSource]="statusHistory" class="history-table">
+          <ng-container matColumnDef="previousValue">
+            <th mat-header-cell *matHeaderCellDef>Avant</th>
+            <td mat-cell *matCellDef="let h">{{ h.previousValue?.name || '—' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="newValue">
+            <th mat-header-cell *matHeaderCellDef>Après</th>
+            <td mat-cell *matCellDef="let h">{{ h.newValue?.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let h">{{ h.startDate | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>Commentaire</th>
+            <td mat-cell *matCellDef="let h">{{ h.comment || '—' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="statusHistoryColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: statusHistoryColumns;"></tr>
+        </table>
+
+        <h3 class="history-title">Historique des titres</h3>
+        <table mat-table [dataSource]="titleHistory" class="history-table">
+          <ng-container matColumnDef="previousValue">
+            <th mat-header-cell *matHeaderCellDef>Avant</th>
+            <td mat-cell *matCellDef="let h">{{ h.previousValue?.name || '—' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="newValue">
+            <th mat-header-cell *matHeaderCellDef>Après</th>
+            <td mat-cell *matCellDef="let h">{{ h.newValue?.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let h">{{ h.startDate | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>Commentaire</th>
+            <td mat-cell *matCellDef="let h">{{ h.comment || '—' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="titleHistoryColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: titleHistoryColumns;"></tr>
+        </table>
+
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+}

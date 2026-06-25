@@ -15,10 +15,17 @@
   font-size: 14px;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
 .form-card {
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   max-width: 600px;
+  background-color: white;
 }
 
 .form-row {
@@ -50,7 +57,4 @@
 .submit-button {
   background-color: #5e6ce0 !important;
   color: #fff !important;
-}
-.form-card {
-  background-color: white;
 }

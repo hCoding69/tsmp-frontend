@@ -82,6 +82,21 @@ export class RepProfileAdd implements OnInit {
     });
   }
 
+  checkIfAgentCodeExists(agentCode: string, userId:string | null) {
+    return this.repProfileService.checkIfAgenCodeExists(agentCode, userId).subscribe({
+      next: (response) => {
+        console.log(response);
+        if(response.data == true) {
+          this.profileForm.get('agentCode')?.setErrors({ codeTaken: true });
+        }
+      },
+
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
   onSubmit(): void {
     if (this.profileForm.invalid) return;
 
@@ -98,4 +113,6 @@ export class RepProfileAdd implements OnInit {
       }
     });
   }
+
+
 }
