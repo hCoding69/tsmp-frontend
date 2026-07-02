@@ -18,9 +18,9 @@ export class RepStatusHistoryService {
     return this.http.get<ApiResponse<any>>(`${this.API_URL}/${repProfileId}/status-history/latest`);
   }
 
-  addStatus(repProfileId: string, dto: { newValueId: string }) {
-    return this.http.post<ApiResponse<any>>(`${this.API_URL}/${repProfileId}/status-history`, dto);
-  }
+addStatus(repProfileId: string, dto: { actualStatusId: string; newStatusId: string; comment: string }) {
+  return this.http.post<ApiResponse<any>>(`${this.API_URL}/${repProfileId}/status-history`, dto);
+}
 
   getAllStatusOptions() {
     return this.http.get<ApiResponse<any[]>>(this.STATUS_URL);

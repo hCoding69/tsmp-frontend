@@ -56,6 +56,8 @@ export class RepProfileEdit implements OnInit {
   selectedTitleId = '';
   isUpdatingStatus = false;
   isUpdatingTitle = false;
+  statusChangeForm: FormGroup;
+  titleChangeForm: FormGroup;
 
   // ─── Historique ──────────────────────────
   statusHistory: any[] = [];
@@ -79,6 +81,19 @@ export class RepProfileEdit implements OnInit {
       phoneNumber: ['', Validators.required],
       comment: ['']
     });
+
+    this.statusChangeForm = this.fb.group({
+      actualStatusId: ['', Validators.required],
+      newStatusId: ['', Validators.required],
+      comment: ['', Validators.required]
+    });
+
+    this.titleChangeForm = this.fb.group({
+      actualTitleId: ['', Validators.required],
+      newTitleId: ['', Validators.required],
+      comment: ['', Validators.required]
+    });
+
   }
 
 ngOnInit(): void {
@@ -105,14 +120,29 @@ ngOnInit(): void {
           phoneNumber: this.profile.phoneNumber,
           comment: this.profile.comment
         });
+        this.statusChangeForm.get('actualStatusId')?.disable();
+        this.titleChangeForm.get('actualTitleId')?.disable();
         if (this.profile.currentStatus) {
           this.selectedStatusId = this.profile.currentStatus.id;
+        }
+        if (this.profile.currentStatus) {
+          this.selectedStatusId = this.profile.currentStatus.id;
+          this.statusChangeForm.patchValue({
+            actualStatusId: this.profile.currentStatus.id
+          });
+        }
+        if (this.profile.currentTitle) {
+          this.selectedTitleId = this.profile.currentTitle.id;
+          this.titleChangeForm.patchValue({
+            actualTitleId: this.profile.currentTitle.id
+          });
         }
         if (this.profile.currentTitle) {
           this.selectedTitleId = this.profile.currentTitle.id;
         }
         this.isLoading = false;
       },
+      
       error: (err) => {
         console.log(err);
         this.isLoading = false;
@@ -153,39 +183,46 @@ loadTitleOptions(): void {
 
   // ─── Onglet Statut & Titre ────────────────
 
-  updateStatus(): void {
-    if (!this.selectedStatusId) return;
-    this.isUpdatingStatus = true;
+updateStatus(): void {
+    console.log('form valid:', this.statusChangeForm.valid);
+  console.log('form value:', this.statusChangeForm.getRawValue());
+  if (this.statusChangeForm.invalid) return;
+  this.isUpdatingStatus = true;
 
-    this.repStatusHistoryService.addStatus(this.profileId, { newValueId: this.selectedStatusId }).subscribe({
-      next: () => {
-        this.isUpdatingStatus = false;
-        this.loadProfile();
-        this.loadStatusHistory();
-      },
-      error: (err) => {
-        console.log(err);
-        this.isUpdatingStatus = false;
-      }
-    });
-  }
+this.repStatusHistoryService.addStatus(this.profileId, this.statusChangeForm.getRawValue()).subscribe({
+    next: (response) => {
+        console.log('status updated:', response);
 
-  updateTitle(): void {
-    if (!this.selectedTitleId) return;
-    this.isUpdatingTitle = true;
+      this.isUpdatingStatus = false;
+      this.loadProfile();
+      this.loadStatusHistory();
+      this.statusChangeForm.reset();
+    },
+    error: (err) => {
+      console.log(err);
+      this.isUpdatingStatus = false;
+    }
+  });
+}
 
-    this.repTitleHistoryService.addTitle(this.profileId, { newValueId: this.selectedTitleId }).subscribe({
-      next: () => {
-        this.isUpdatingTitle = false;
-        this.loadProfile();
-        this.loadTitleHistory();
-      },
-      error: (err) => {
-        console.log(err);
-        this.isUpdatingTitle = false;
-      }
-    });
-  }
+
+updateTitle(): void {
+  if (this.titleChangeForm.invalid) return;
+  this.isUpdatingTitle = true;
+
+  this.repTitleHistoryService.addTitle(this.profileId, this.titleChangeForm.getRawValue()).subscribe({
+    next: () => {
+      this.isUpdatingTitle = false;
+      this.loadProfile();
+      this.loadTitleHistory();
+      this.titleChangeForm.reset();
+    },
+    error: (err) => {
+      console.log(err);
+      this.isUpdatingTitle = false;
+    }
+  });
+}
 
   // ─── Onglet Historique ────────────────────
 
